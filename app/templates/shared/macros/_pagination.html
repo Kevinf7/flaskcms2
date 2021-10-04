@@ -1,0 +1,43 @@
+{% macro pagination(page_obj, path) %}
+<div class="container pt-5 pb-5">
+  <nav class="pagination" role="navigation" aria-label="pagination">
+    {% if page_obj.has_prev%}
+      {% if kwargs['show'] %}
+      <a class="pagination-previous" href="{{ url_for(path,page=page_obj.prev_num,show=kwargs['show']) }}">Previous</a>
+      {% else %}
+      <a class="pagination-previous" href="{{ url_for(path,page=page_obj.prev_num) }}">Previous</a>
+      {% endif %}
+    {% else %}
+      <a class="pagination-previous" disabled>Previous</a>
+    {% endif %}
+    {% if page_obj.has_next %}
+      {% if kwargs['show'] %}
+      <a class="pagination-next" href="{{ url_for(path,page=page_obj.next_num,show=kwargs['show']) }}">Next Page</a>
+      {% else %}
+      <a class="pagination-next" href="{{ url_for(path,page=page_obj.next_num) }}">Next Page</a>
+      {% endif %}
+    {% else %}
+      <a class="pagination-next" disabled>Next Page</a>
+    {% endif %}
+    <ul class="pagination-list">
+    {% for page_num in page_obj.iter_pages(left_edge=1, left_current=3, right_current=3, right_edge=1) %}
+      {% if page_num %}
+        {% if page_num != page_obj.page %}
+          <li>
+            {% if kwargs['show'] %}
+            <a class="pagination-link" aria-label="Goto page {{ page_num }}" href="{{ url_for(path,page=page_num,show=kwargs['show']) }}">{{ page_num }}</a>
+            {% else %}
+            <a class="pagination-link" aria-label="Goto page {{ page_num }}" href="{{ url_for(path,page=page_num) }}">{{ page_num }}</a>
+            {% endif %}
+          </li>
+        {% else %}
+          <li class="pagination-link is-current" aria-label="Page {{ page_num }}" aria-current="page">{{ page_num }}</li>
+        {% endif %}
+      {% else %}
+        <span class="pagination-ellipsis">&hellip;</span>
+      {% endif %}
+    {% endfor %}
+    </ul>
+  </nav>
+</div>
+{% endmacro %}

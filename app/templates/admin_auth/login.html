@@ -1,0 +1,110 @@
+{% extends "admin_auth/base_auth.html" %}
+{% block title %}Login{% endblock %}
+
+{% block app_content %}
+<div id="this-block">
+
+  <form 
+    ref="loginForm" 
+    method="post" 
+    action="{{ url_for('admin_auth.login') }}" 
+    class="box">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+    <div class="field">
+      <div class="label">Email</div>
+      <div class="control has-icons-left">
+        <input 
+          autofocus
+          name="email"
+          class="input"
+          type="text"
+          v-model="email">
+        <span class="icon is-small is-left">
+          <i class="fas fa-envelope"></i>
+        </span>
+      </div>
+      <p v-if="errorMsg[0]" class="help is-danger">[[ errorMsg[0] ]]</p>
+    </div>
+
+    <div class="field">
+      <div class="label">Password</div>
+      <div class="control has-icons-left">
+        <input 
+          name="password"
+          class="input"
+          type="password"
+          v-model="password">
+        <span class="icon is-small is-left">
+          <i class="fas fa-envelope"></i>
+        </span>
+      </div>
+      <p v-if="errorMsg[1]" class="help is-danger">[[ errorMsg[1] ]]</p>
+    </div>
+
+    <div class="pt-3 field is-grouped">
+      <div class="control">
+        <label class="checkbox">
+          <input id="remember_me" name="remember_me" type="checkbox" value="y">
+          <span class="is-size-7">Remember me</span>
+        </label>
+      </div>
+      <div class="control is-expanded has-text-right">
+        <input 
+          type="submit"
+          @click.prevent="doValidate"
+          name="submit_btn" 
+          class="button is-link">
+      </div>
+    </div>
+  </form>
+
+  <div class="content is-size-7 has-text-centered">
+    <p><a href="{{ url_for('admin_auth.forgot_password') }}">Forgot Password</a></p>
+    <p><a href="{{ main_url }}">&larr; Go to main site</a></p>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+  new Vue({
+    el: '#this-block',
+    delimiters: ['[[', ']]'],
+    data() {
+      return {
+        email: '',
+        password: '',
+        errorMsg: ['','']
+      }
+    },
+    methods: {
+      clearErrors() {
+        for (let i=0; i<this.errorMsg.length;i++) {
+          this.errorMsg[i] = ''
+        }
+      },
+      hasError() {
+        err = false
+        for(let i=0; i<this.errorMsg.length; i++) {
+          if(this.errorMsg[i] != '') err = true
+        }
+        return err
+      },
+      doValidate() {
+        this.clearErrors()
+        if (this.email.length == 0) {
+          Vue.set(this.errorMsg, 0, 'This is a mandatory field')
+        }
+        if (this.password.length == 0) {
+          Vue.set(this.errorMsg, 1, 'This is a mandatory field')
+        }
+        if (!this.hasError()) {
+          this.$refs.loginForm.submit()
+        }
+      }
+    }
+  })
+</script>
+{% endblock %}

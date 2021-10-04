@@ -1,0 +1,150 @@
+{% extends "shared/base_main.html" %}
+{% from 'shared/macros/_modal.html' import modal %}
+{% block title %}Blog Tag{% endblock %}
+
+{% block app_content %}
+<div id="this-block">
+
+  {{ modal('showDelModal', 'Confirm you wish to delete the tag "[[ tagName ]]"','Delete','doDelDelete','Cancel','doDelCancel') }}
+  {{ modal('showEditModal', 'Enter a new name for "[[ tagName ]]"
+  <div class="control"><input v-model="newName" class="input" type="text" placeholder="Tag name"></div>'|safe,'Update','doEditUpdate','Cancel','doEditCancel') }}
+
+  <div class="tabs is-boxed">
+    <ul>
+      <li :class="{ 'is-active': tabSelected }">
+        <a href="#" @click.prevent="tabSelected=true">
+        Tags used
+        </a>
+      </li>
+      <li :class="{ 'is-active': !tabSelected }">
+        <a href="#" @click.prevent="tabSelected=false">
+        Tags not used
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div v-if="tabSelected" >
+    <table class="table is-striped is-hoverable">
+      {% if tag_used|length > 0 %}
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Posts used in</th>
+          <th></th>
+        </tr>
+      </thead>
+      {% endif %}
+      <tbody>
+      {% for tu in tag_used %}
+        <tr>
+          <td>{{ tu.name }}</td>
+          <td>
+            {% for p in tu.posts %}
+            {% if not loop.last %}
+            <a href="{{ url_for('admin_blog.edit_post',id=p.posts.id) }}">{{ p.posts.title }}</a>,
+            {% else %}
+            <a href="{{ url_for('admin_blog.edit_post',id=p.posts.id) }}">{{ p.posts.title }}</a>
+            {% endif %}
+            {% endfor %}
+          </td>
+          <td>
+            <a href="#" @click.prevent="showEdit({{ tu.id }}, '{{ tu.name }}')">
+              <span key="tab1"><i class="far fa-edit" title="edit"></i></span>
+            </a>
+          </td>
+        </tr>
+      {% else %}
+        <tr><td class="content">No tags used in database</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div v-else>
+    <table class="table is-striped is-hoverable">
+      {% if tag_notused|length > 0 %}
+      <thead>
+        <tr>
+          <th class="has-text-weight-bold">Name</th>
+          <th class="has-text-weight-bold" colspan="2"></th>
+        </tr>
+      </thead>
+      {% endif %}
+      <tbody>
+        {% for tnu in tag_notused %}
+        <tr>
+          <td>{{ tnu.name }}</td>
+          <td>
+            <a href="#" @click.prevent="showDel({{ tnu.id }}, '{{ tnu.name }}')">
+              <span key="tab2"><i class="far fa-trash-alt" key="tab2" title="delete"></i></span>
+            </a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td class="content">No tags not used in database</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <form ref="delForm" method="post" action="{{ url_for('admin_blog.del_tag') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    <input type="hidden" name="id" :value="id"/>
+  </form>
+
+  <form ref="editForm" method="post" action="{{ url_for('admin_blog.edit_tag') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    <input type="hidden" name="id" :value="id"/>
+    <input type="hidden" name="name" :value="newName.toLowerCase()"/>
+  </form>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+  new Vue({
+    el: '#this-block',
+    delimiters: ['[[', ']]'],
+    data: {
+      tabSelected: {{ tab }},
+      id: 0,
+      newName: '',
+      tagName: '',
+      showDelModal: false,
+      showEditModal: false
+    },
+    methods: {
+      showDel(id, tagName) {
+        this.id = id
+        this.tagName = tagName
+        this.showDelModal = true
+      },
+      doDelCancel() {
+        this.showDelModal = false
+      },
+      doDelDelete() {
+        this.showDelModal = false
+        this.$nextTick(() => {
+          this.$refs.delForm.submit()
+        })
+      },
+      showEdit(id, tagName) {
+        this.id = id
+        this.tagName = tagName
+        this.showEditModal = true
+      },
+      doEditCancel() {
+        this.showEditModal = false
+      },
+      doEditUpdate() {
+        this.showEditModal = false
+        this.$nextTick(() => {
+          this.$refs.editForm.submit()
+        })
+      },
+    }
+  })
+</script>
+{% endblock %}

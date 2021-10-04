@@ -1,0 +1,30 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    font-family: 'Arial', serif;
+}
+
+body {
+    background-color: #FFFFFF;
+}
+.menu-spacing {
+    display: inline-block;
+    width: 30px;
+}
+.tag-tags {
+    display:inline-flex;
+}
+.app-menu-link {
+    color:#FFFFFF;
+}
+.app-menu-link:hover {
+    color:#CCCCCC;
+}
+
+  

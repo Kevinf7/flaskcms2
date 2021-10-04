@@ -1,0 +1,246 @@
+{% extends "shared/base.html" %}
+
+{% block content %}
+<div class="columns is-gapless" style="min-height:100vh;">
+  <div id="main-app-1" class="column is-narrow has-background-primary">
+    <div class="is-primary">
+      <div class="p-3 title is-4 has-text-centered has-text-warning is-family-secondary">
+        Flask CMS&nbsp;&nbsp;
+      </div>
+    </div>
+    <aside class="p-4 menu">
+      <ul class="menu-list">
+        <li>
+          <a href="{{ url_for('admin_main.index') }}" style="margin-left:-16px;">
+            <span class="menu-spacing"><i class="fas fa-home"></i></span>
+            Home
+          </a>
+        </li>
+      </ul>
+
+      <!--BLOG-->
+      {% if config.ADMIN_BLOG %}
+      <div class="menu-label">
+        <a class="app-menu-link" href="#" 
+          @click="showBlog = !showBlog; setLocal('show_blog',showBlog)">
+          <span class="pr-3" v-show="showBlog"><i class="far fa-minus-square"></i></span>
+          <span class="pr-3" v-show="!showBlog"><i class="far fa-plus-square"></i></span>
+          Blog
+        </a>
+      </div>
+      <ul v-if="showBlog" class="menu-list">
+        <li>
+          <a href="{{ url_for('admin_blog.blog') }}">
+            <span class="menu-spacing"><i class="fab fa-microblog"></i></span>
+            Blog
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('admin_blog.tag') }}">
+            <span class="menu-spacing"><i class="fas fa-tag"></i></span>
+            Tags
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('admin_blog.comment') }}">
+            <span class="menu-spacing"><i class="far fa-comment"></i></span>
+            Comments
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('admin_media.media',show='blog') }}">
+            <span class="menu-spacing"><i class="far fa-image"></i></span>
+            Media
+          </a>
+        </li>
+      </ul>
+      {% endif %}
+      <!--END BLOG-->
+
+      <!--PAGE-->
+      {% if config.ADMIN_PAGE %}
+      <p class="menu-label">
+        <a href="#" class="app-menu-link" 
+          @click.prevent="showPage = !showPage; setLocal('show_page',showPage)">
+          <span class="pr-3" v-show="showPage"><i class="far fa-minus-square"></i></span>
+          <span class="pr-3" v-show="!showPage"><i class="far fa-plus-square"></i></span>
+          Pages
+        </a>
+      </p>
+      <ul v-if="showPage" class="menu-list">
+        <li>
+          <a href="{{ url_for('admin_page.page') }}">
+            <span class="menu-spacing"><i class="far fa-file-alt"></i></span>
+            Pages
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('admin_media.media',show='page') }}">
+            <span class="menu-spacing"><i class="far fa-image"></i></span>
+            Media
+          </a>
+        </li>
+      </ul>
+      {% endif %}
+      <!--END PAGE-->
+
+      <!--MESSAGE-->
+      {% if config.ADMIN_MESSAGE %}
+      <div class="menu-label app-menu-link">
+        <a href="#" class="app-menu-link" 
+          @click.prevent="showContact = !showContact; setLocal('show_contact',showContact)">
+          <span class="pr-3" v-show="showContact"><i class="far fa-minus-square"></i></span>
+          <span class="pr-3" v-show="!showContact"><i class="far fa-plus-square"></i></span>
+          Contact Form
+        </a>
+      </div>
+      <ul v-if="showContact" class="menu-list">
+        <li>
+          <a href="{{ url_for('admin_message.message') }}">
+            <span class="menu-spacing"><i class="far fa-envelope"></i></span>
+            Messages
+          </a>
+        </li>
+      </ul>
+      {% endif %}
+      <!--END MESSAGE-->
+
+      <!--SHOP-->
+      {% if config.ADMIN_SHOP %}
+      <p class="menu-label">
+        <a href="#" class="app-menu-link" 
+          @click.prevent="showShop = !showShop; setLocal('show_shop',showShop)">
+          <span class="pr-3" v-show="showShop"><i class="far fa-minus-square"></i></span>
+          <span class="pr-3" v-show="!showShop"><i class="far fa-plus-square"></i></span>
+          Shop
+        </a>
+      </p>
+      <ul v-if="showShop" class="menu-list">
+        <li>
+          <a href="{{ url_for('admin_shop.shop') }}">
+            <span class="menu-spacing"><i class="fas fa-shopping-cart"></i></span>
+            Shop
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('admin_shop.shop') }}">
+            <span class="menu-spacing"><i class="fas fa-shopping-cart"></i></span>
+            Ref
+          </a>
+        </li>
+      </ul>
+      {% endif %}
+      <!--END SHOP-->
+
+      <hr style="border-top: 1px solid #DDDDDD;"/>
+      <p><a class="app-menu-link is-size-7" href="{{ url_for('admin_main.about') }}">About Flask CMS</a></p>
+    </aside>
+  </div>
+  <div class="column">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <article class="message is-{{ category }}">
+            <div class="message-body">{{ message }}</div>
+          </article>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <div class="mb-5">
+      <nav class="level is-mobile">
+        <div class="ml-5 level-left"> 
+          {% if breadcrumb %}
+          <div class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+          {% endif %}
+          {% for b in breadcrumb %}
+          {% if not loop.last %}
+            <li>
+          {% else %}
+            <li class="has-text-weight-bold">
+          {% endif %}
+              <a href="{{ b.url }}">
+          {% if b.icon %}    
+              <span class="mr-2">{{ b.icon|safe }}</span> 
+          {% endif %}
+              {{ b.name }}</a></li>
+          {% endfor %}
+          {% if breadcrumb %}
+            </ul>
+          </div>
+          {% endif %}
+        </div>
+        <div id="main-app-2" class="mr-5 level-right">
+          <div class="level-item">
+            <div class="navbar" role="navigation" aria-label="dropdown navigation">
+              <div class="navbar-item has-dropdown" :class="profileToggle ? 'is-active' : ''">
+                <a class="navbar-link" @click.prevent="profileToggle=!profileToggle">
+                  {{ current_user.firstname }} {{ current_user.lastname }}
+                </a>
+                <div class="navbar-dropdown">
+                  <a class="navbar-item" href="{{ url_for('admin_main.site_setting') }}">Site Settings</a>
+                  <a class="navbar-item" href="{{ url_for('admin_auth.logout') }}">Logout</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <div class="container pt-3 pb-5 pl-5 pr-5 is-fluid">
+    {% block app_content %}{% endblock %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    new Vue({
+      el: '#main-app-1',
+      delimiters: ['[[', ']]'],
+      data() {
+        return {
+          showBlog: true,
+          showPage: true,
+          showContact: true,
+          showShop: true
+        }
+      },
+      methods: {
+        setLocal(name, val) {
+          localStorage[name] = val
+        }
+      },
+      mounted() {
+        if (localStorage.show_blog) {
+          this.showBlog = localStorage.show_blog === 'true'
+        }
+        if (localStorage.show_page) {
+          this.showPage = localStorage.show_page === 'true'
+        }
+        if (localStorage.show_contact) {
+          this.showContact = localStorage.show_contact === 'true'
+        }
+        if (localStorage.show_shop) {
+          this.showShop = localStorage.show_shop === 'true'
+        }
+      }
+    })
+  </script>
+  
+  <script>
+    new Vue({
+      el: '#main-app-2',
+      delimiters: ['[[', ']]'],
+      data() {
+        return {
+          profileToggle: false
+        }
+      }
+    })
+  </script>
+{% endblock %}
+

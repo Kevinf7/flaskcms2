@@ -1,0 +1,7 @@
+{
+  "python.pythonPath": "api\\env\\Scripts\\python.exe",
+  "python.analysis.useImportHeuristic": true,
+  "python.linting.pylintEnabled": true,
+  "python.linting.enabled": true,
+  "python.linting.flake8Enabled": false
+}

@@ -1,0 +1,204 @@
+{% extends "shared/base_main.html" %}
+{% block title %}Site Settings{% endblock %}
+
+{% block app_content %}
+<div id="this-block">
+  <form ref="form" action="{{ url_for('admin_main.site_setting') }}" 
+    method="post" class="mb-5">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+    <div class="field">
+      <label class="label">Google Maps Key</label>
+      <p class="help is-info">
+        <i class="fas fa-exclamation-circle"></i>
+        Google Maps API key. Hidden for security
+      </p>
+      <div class="control">
+        <input 
+          autofocus
+          name="google_map_key"
+          class="input"
+          type="text"
+          v-model="google_map_tmp">
+      </div>
+      <p v-if="errorMsg[0]" class="help is-danger">[[ errorMsg[0] ]]</p>
+    </div>
+
+    <div class="field">
+      <label class="label">Recaptcha Key</label>
+      <p class="help is-info">
+        <i class="fas fa-exclamation-circle"></i>
+        Google Recaptcha v2 API key. Hidden for security
+      </p>
+      <div class="control">
+        <input 
+          name="recaptcha_key"
+          class="input"
+          type="text"
+          v-model="recaptcha_tmp">
+      </div>
+      <p v-if="errorMsg[1]" class="help is-danger">[[ errorMsg[1] ]]</p>
+    </div>
+
+    <div class="field">
+      <label class="label">Sendgrid Key</label>
+      <p class="help is-info">
+        <i class="fas fa-exclamation-circle"></i>
+        Sengrid API key. Hidden for security
+      </p>
+      <div class="control">
+        <input 
+          name="sendgrid_key"
+          class="input"
+          type="text"
+          v-model="sendgrid_tmp">
+      </div>
+      <p v-if="errorMsg[2]" class="help is-danger">[[ errorMsg[2] ]]</p>
+    </div>
+
+    <div class="field">
+      <label class="label">Mail From</label>
+      <p class="help is-info">
+        <i class="fas fa-exclamation-circle"></i>
+        Email system sender such as "no-reply@mysite.com"
+      </p>
+      <div class="control">
+        <input 
+          name="mail_from"
+          class="input"
+          type="text"
+          v-model="mail_from">
+      </div>
+      <p v-if="errorMsg[3]" class="help is-danger">[[ errorMsg[3] ]]</p>
+    </div>
+
+    <div class="field">
+      <label class="label">Mail Admins</label>
+      <p class="help is-info">
+        <i class="fas fa-exclamation-circle"></i>
+        List of admin email addresses to send admin emails to, separated by a space such as "john@abc.com mary@zzz.com"
+      </p>
+      <div class="control">
+        <input 
+          name="mail_admins"
+          class="input"
+          type="text"
+          v-model="mail_admins">
+      </div>
+      <p v-if="errorMsg[4]" class="help is-danger">[[ errorMsg[4] ]]</p>
+    </div>
+
+    <div class="field">
+      <label class="label">Posts per page</label>
+      <p class="help is-info">
+        <i class="fas fa-exclamation-circle"></i>
+        Number of posts to appear per page
+      </p>
+      <div class="control">
+        <input 
+          name="posts_per_page"
+          class="input"
+          type="text"
+          v-model="posts_per_page">
+      </div>
+      <p v-if="errorMsg[5]" class="help is-danger">[[ errorMsg[5] ]]</p>
+    </div>
+
+    <div class="field">
+      <label class="label">Comments Banned List</label>
+      <p class="help is-info">
+        <i class="fas fa-exclamation-circle"></i>
+        List of words that are banned in Comments, separated by a space
+      </p>
+      <div class="control">
+        <input 
+          name="comment_banned"
+          class="input"
+          type="text"
+          v-model="comment_banned">
+      </div>
+      <p v-if="errorMsg[6]" class="help is-danger">[[ errorMsg[6] ]]</p>
+    </div>
+
+    <input type="submit" @click.prevent="doValidate" name="submit_btn" 
+      value="Submit" class="button is-link">
+  </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+new Vue({
+  el: '#this-block',
+  delimiters: ['[[', ']]'],
+  data() {
+    return {
+      google_map_tmp: '####',
+      google_map_key: '{{ setting.google_map_key or "" }}',
+      recaptcha_tmp: '####',
+      recaptcha_key: '{{ setting.recaptcha_key or "" }}',
+      sendgrid_tmp: '####',
+      sendgrid_key: '{{ setting.sendgrid_key or "" }}',
+      mail_from: '{{ setting.mail_from or "" }}',
+      mail_admins: '{{ setting.mail_admins or "" }}',
+      posts_per_page: '{{ setting.posts_per_page or "" }}',
+      comment_banned: '{{ setting.comment_banned or "" }}',
+      errorMsg: ['','','','','','','']
+    }
+  },
+  methods: {
+    clearErrors() {
+      for (let i=0; i<this.errorMsg.length;i++) {
+        this.errorMsg[i] = ''
+      }
+    },
+    hasError() {
+      err = false
+      for(let i=0; i<this.errorMsg.length; i++) {
+        if(this.errorMsg[i] != '') err = true
+      }
+      return err
+    },
+    doValidate() {
+      this.clearErrors()
+      if (this.google_map_tmp.length > 100) {
+        Vue.set(this.errorMsg, 0, 'Maximum 100 characters')
+      }
+      if (this.recaptcha_tmp.length > 100) {
+        Vue.set(this.errorMsg, 1, 'Maximum 100 characters')
+      }
+      if (this.sendgrid_tmp.length > 100) {
+        Vue.set(this.errorMsg, 2, 'Maximum 100 characters')
+      }
+      if (this.mail_from.length > 50) {
+        Vue.set(this.errorMsg, 3, 'Maximum 50 characters')
+      }
+      if (this.mail_admins.length > 500) {
+        Vue.set(this.errorMsg, 4, 'Maximum 500 characters')
+      }
+      if (!Number.isInteger(this.posts_per_page)) {
+        Vue.set(this.errorMsg, 5, 'Must be an integer')
+      }
+      if (this.comment_banned.length > 1000) {
+        Vue.set(this.errorMsg, 6, 'Maximum 1000 characters')
+      }
+      if (!this.hasError()) {
+        if (this.google_map_tmp == '####') {
+          this.google_map_tmp = this.google_map_key
+        }
+        if (this.recaptcha_tmp == '####') {
+          this.recaptcha_tmp = this.recaptcha_key
+        }
+        if (this.sendgrid_tmp == '####') {
+          this.sendgrid_tmp = this.sendgrid_key
+        }
+        this.$nextTick(() => {
+          this.$refs.form.submit()
+        })
+      }
+    }
+  }
+})
+</script>
+{% endblock %}

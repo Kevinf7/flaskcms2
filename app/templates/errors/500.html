@@ -1,0 +1,11 @@
+{% extends "admin_errors/base_errors.html" %}
+{% block title %}500 Error{% endblock %}
+
+{% block app_content %}
+<div class="section">
+  <div class="content">
+    <h2>500 internal server error</h2>
+    <p><a href="{{ url_for('admin_main.index') }}">Back</a></p>
+  </div>
+</div>
+{% endblock %}

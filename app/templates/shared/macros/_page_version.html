@@ -1,0 +1,61 @@
+{% macro version(which_page) %}
+  {% if all_ver %}
+  <div class="content mt-6 mb-6">
+
+    <div class="table-container">
+      <table class="table is-narrow is-hoverable">
+        <thead>
+          <tr>
+            <th>Last published</th>
+            <th>by</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for v in all_ver %}
+            {% if v.page_status.name == 'published' %}
+            <tr class="has-background-success-light">
+              <td>{{ moment(v.update_date).format('D MMM YYYY hh:mm') }}</td>
+              <td>{{ v.author.email }}</td>
+              <td>Published</td>
+            {% elif v.page_status.name == 'draft' %}
+            <tr class="has-background-warning-light">
+              <td></td>
+              <td></td>
+              <td>Draft</td>
+            {% else %}
+            <tr>
+              <td>{{ moment(v.update_date).format('D MMM YYYY hh:mm') }}</td>
+              <td>{{ v.author.email }}</td>
+              <td>Archived</td>
+            {% endif %}
+              <td>
+                {% if v.id == edit_ver.id %}
+                <p>Currently editing</p>
+                {% else %}
+                {% if which_page == 'contact' %}
+                <form method="post" action="{{ url_for('admin_page.page_contact') }}">
+                {% elif which_page == 'home_main' %}
+                <form method="post" action="{{ url_for('admin_page.page_home_main') }}">
+                {% elif which_page == 'home_hero' %}
+                <form method="post" action="{{ url_for('admin_page.page_home_hero') }}">
+                {% else %}
+                <form method="post"></form>
+                {% endif %}
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                  <input type="hidden" name="id" value="{{ v.id }}"/>
+                  <input type="hidden" name="action" value="Edit this version"/>
+                  <input type="submit" 
+                    name="submit_btn" value="Edit this version" class="button is-small">
+                </form>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+{% endmacro %}

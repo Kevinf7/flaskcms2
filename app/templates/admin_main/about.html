@@ -1,0 +1,33 @@
+{% extends "shared/base_main.html" %}
+{% block title %}About{% endblock %}
+
+{% block app_content %}
+<div class="container has-text-centered">
+  <div class="content">
+    <h5 class="pt-5 pb-5">A simple to use, yet feature-packed Content Management System!</h5>
+    <p>Flask CMS is developed by <a href="https://kevin7.net">Kevin Foong</a> using the below technologies and frameworks.</p>
+    <p>
+      <span class="m-4">
+        <a href="https://flask.palletsprojects.com/en/1.1.x/"><img src="{{ url_for('static', filename='images/flask.svg') }}" width="280"/></a>
+      </span>
+      <span class="m-4">
+        <a href="https://www.python.org/"><img src="{{ url_for('static', filename='images/python.svg') }}" width="320"/></a>
+      </span>
+    </p>
+    <p>
+      <span class="m-4">
+        <a href="https://www.mysql.com/"><img src="{{ url_for('static', filename='images/mysql.svg') }}" width="140"/></a>
+      </span>
+      <span class="m-4">
+        <a href="https://www.tiny.cloud/"><img src="{{ url_for('static', filename='images/tiny.svg') }}" width="140"/></a>
+      </span>
+      <span class="m-4">
+        <a href="https://bulma.io/"><img src="{{ url_for('static', filename='images/bulma.svg') }}" width="50"/></a>
+      </span>
+      <span class="m-4">
+        <a href="https://vuejs.org/"><img src="{{ url_for('static', filename='images/vue_js.svg') }}" width="80"/></a>
+      </span>
+    </p>
+  </div>
+</div>
+{% endblock %}

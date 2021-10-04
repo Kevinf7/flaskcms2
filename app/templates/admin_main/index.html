@@ -1,0 +1,146 @@
+{% extends "shared/base_main.html" %}
+{% block title %}Home{% endblock %}
+
+{% block app_content %}
+<div class="tile is-ancestor">
+  <div class="tile is-parent is-vertical">
+    <div class="tile is-child box">
+      <div class="content">
+        <h3>Welcome to Flask CMS</h3>
+        <p>Where you control your content</p>
+        <p>
+          <a href="{{ main_url }}">&larr; Go to Main site</a><br/>
+        </p>
+      </div>
+    </div>
+    <div class="tile is-child box">
+      <div class="content">
+        <h4>At a glance</h4>
+        {% if config.ADMIN_BLOG %}
+        <h6>Blog</h6>
+        <p>
+          <a href="{{ url_for('admin_blog.blog') }}">{{ total_post }} Posts</a>,
+          <a href="{{ url_for('admin_blog.tag') }}">{{ total_tags }} Tags</a>,
+          <a href="{{ url_for('admin_blog.comment') }}">{{ total_comment }} Comments</a>,
+          <a href="{{ url_for('admin_media.media',show='blog') }}">{{ total_media_blog }} Images</a>
+        </p>
+        {% endif %}
+        {% if config.ADMIN_PAGE %}
+        <h6>Pages</h6>
+        <p>
+          <a href="{{ url_for('admin_page.page') }}">{{ total_pages }} Pages</a>,
+          <a href="{{ url_for('admin_media.media',show='page') }}">{{ total_media_page }} Images</a>
+        </p>
+        {% endif %}
+        {% if config.ADMIN_MESSAGE %}
+        <h6>Messages</h6>
+        <p>
+          <a href="{{ url_for('admin_message.message') }}">{{ total_message }} Messages</a>
+        </p>
+        {% endif %}
+      </div>
+    </div>
+    {% if config.ADMIN_BLOG or config.ADMIN_MESSAGE %}
+    <div class="tile is-child box">
+      <div class="content">
+        <h4>Alerts</h4>
+        {% if config.ADMIN_BLOG %}
+          {% if new_comment > 0 %}
+          <p><span class="has-background-warning">You have {{ new_comment }} new comments since last login</span></p>
+          {% else %}
+          <p>You have {{ new_comment }} new comments since last login</p>
+          {% endif %}
+          {% endif %}
+          {% if config.ADMIN_MESSAGE %}
+          {% if new_message > 0 %}
+          <p><span class="has-background-warning">You have {{ new_message }} new messages since last login</span></p>
+          {% else %}
+          <p>You have {{ new_message }} new messages since last login</p>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+  <div class="tile is-parent">
+    <div class="tile is-child box">
+      <div class="content">
+        <h4>Activity</h4>
+        {% if config.ADMIN_BLOG %}
+          <h6>Most recent posts</h6>
+          {% if post_latest %}
+            <p>
+            {% for p in post_latest %}
+            {{ moment(p.update_date).format('D MMM YYYY') }} - 
+            <a href="{{ url_for('admin_blog.edit_post',id=p.id) }}">{{ p.title }}</a>
+            <br/>
+            {% endfor %}
+            </p>
+          {% else %}
+            <div class="content"><p>No posts in database</p></div>
+          {% endif %}
+          <h6>Most used tags</h6>
+          {% if top_tags %}
+            <p>
+            {% for t in top_tags %}
+            <span class="tag is-info is-light">{{ t[0].name }}</span>
+            <span class="is-size-7">({{ t[1] }})</span>
+            {% endfor %}
+            </p>
+          {% else %}
+            <div class="content"><p>No tags in database</p></div>
+          {% endif %}
+          <h6>Most recent comment</h6>
+          {% if comment_latest %}
+          <div class="columns">
+            <div class="column is-narrow">
+              <img src="{{ url_for('static',filename='images/def_gravatar.png') }}" width="50"/>
+            </div>
+            <div class="column">
+              <div class="content">
+                <p>
+                  <span class="is-size-7">
+                    From 
+                    {% if comment_latest.user %}
+                    Admin
+                    {% else %}
+                    {{ comment_latest.name }} 
+                    {% endif %}
+                    on {{comment_latest.post.title}}, {{ moment(comment_latest.create_date).fromNow() }}
+                  </span><br/>
+                  {{ comment_latest.comment|truncate(480) }}
+                </p>
+              </div>
+            </div>
+          </div>
+          {% else %}
+          <div class="content"><p>No comments in database</p></div>
+          {% endif %}
+        {% endif %}
+
+        {% if config.ADMIN_PAGE %}
+          <h6>Most recent pages updated</h6>
+          {% if page_latest %}
+          <p>
+            {% for p in page_latest %}
+            {{ moment(p.last_publish_date).format('D MMM YYYY') }} -
+            {{ p.display }}<br/>
+            {% endfor %}
+          </p>
+          {% else %}
+          <div class="content"><p>No pages in database</p></div>
+          {% endif %}
+          <h6>Most recent images</h6>
+          {% if image_latest %}
+          {% for img in image_latest %}
+          <img width="80" src="{{ url_for('static',filename='uploads/' ~ img.image_type.name ~ '/thumbnails/' ~ img.thumbnail) }}">
+          {% endfor %}
+          {% else %}
+          <div class="content"><p>No images in database</p></div>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

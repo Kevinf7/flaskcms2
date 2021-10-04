@@ -1,0 +1,13 @@
+<div class="level">
+  <div class="level-left">
+  </div>
+  <div class="level-right">
+    {% if edit_ver.page_status.name == 'draft' %}
+    <input type="submit" @click.prevent="doValidate" name="submit_btn" value="Delete" class="button is-link mr-3">
+    <input type="submit" @click.prevent="doValidate" name="submit_btn" value="Save" class="button is-link mr-3">
+    <input type="submit" @click.prevent="doValidate" name="submit_btn" value="Publish" class="button is-link">
+    {% else %}
+    <input type="submit" @click.prevent="doValidate" name="submit_btn" value="Save as draft" class="button is-link">
+    {% endif %}
+  </div>
+</div>

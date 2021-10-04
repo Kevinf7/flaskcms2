@@ -1,0 +1,23 @@
+{
+  "name": "static",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "postcss tailwind.css -o ../dist/css/styles.css",
+    "watch": "postcss tailwind.css -o ../dist/css/styles.css --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^10.3.6",
+    "postcss": "^8.3.8",
+    "tailwindcss": "^2.2.16",
+    "tailwindcss-debug-screens": "^2.1.0"
+  },
+  "dependencies": {
+    "@tailwindcss/typography": "^0.4.1",
+    "postcss-cli": "^9.0.0"
+  }
+}

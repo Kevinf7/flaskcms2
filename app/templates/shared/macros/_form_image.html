@@ -1,0 +1,47 @@
+{% macro form_image(img_num, err_num) %}
+<div class="field">      
+  <div class="control">
+    <label class="radio">
+      <input type="radio" value="upload" v-model="data_img.newimage{{ img_num }}" 
+        @change="clearSelection('imgselect{{ img_num }}',{{ img_num }},{{ err_num }})">
+      Upload new image
+    </label>
+    <label class="radio">
+      <input type="radio" value="select" v-model="data_img.newimage{{ img_num }}" 
+        @change="clearSelection('imgupload{{ img_num }}',{{ img_num }},{{ err_num }})">
+      Use image from Media
+    </label>
+  </div>
+</div>
+
+<div class="field">
+  <div class="control">
+    <div v-if="data_img.newimage{{ img_num }}=='upload'" class="file is-normal has-name">
+      <label class="file-label">
+        <input ref="imgupload{{ img_num }}" @change="fileSelected($event,{{ img_num }})" class="file-input" type="file" name="new_image{{ img_num }}">
+        <span class="file-cta">
+          <span class="file-icon">
+            <i class="fas fa-upload"></i>
+          </span>
+          <span class="file-label">
+            Upload new image
+          </span>
+        </span>
+        <span class="file-name">[[ data_img.filename{{ img_num }} | truncate(20, '..') ]] 
+          <span v-if="data_img.filename{{ img_num }} != 'No file selected'">
+            <button @click.prevent="clearSelection('imgupload{{ img_num }}',{{ img_num }},{{ err_num }})" class="delete is-small"></button>
+          </span>
+        </span>
+      </label>
+    </div>
+    <input 
+      v-else-if="data_img.newimage{{ img_num }}=='select'"
+      ref="imgselect{{ img_num }}" 
+      class="input" 
+      name="new_path{{ img_num }}" 
+      type="text" 
+      placeholder="Enter image name or path">
+  </div>
+</div>
+<p v-if="errorMsg[{{ err_num }}]" class="help is-danger">[[ errorMsg[{{ err_num }}] ]]</p>
+{% endmacro %}

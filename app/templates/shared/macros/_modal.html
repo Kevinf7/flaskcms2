@@ -1,0 +1,20 @@
+{% macro modal(vue_var, main_txt, button1_txt, button1_func, button2_txt, button2_func) %}
+<div :class="{{ vue_var }} ? 'is-active' : ''" class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-content">
+        <div class="content">
+        <p>{{ main_txt }}</p>
+        </div>
+      </div>
+      <footer class="card-footer">
+        <div class="container p-4 has-text-centered">
+          <button class="button is-link" @click.prevent="{{ button1_func }}">{{ button1_txt }}</button>
+          <button class="button" @click.prevent="{{ button2_func }}">{{ button2_txt }}</button>
+        </div>
+      </footer>
+    </div>
+  </div>
+</div>
+{% endmacro %}

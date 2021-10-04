@@ -1,0 +1,176 @@
+{% extends "shared/base_main.html" %}
+{% from 'shared/macros/_page_version.html' import version with context %}
+{% from 'shared/macros/_form_image.html' import form_image with context %}
+{% block title %}Page Home Main{% endblock %}
+
+{% block app_content %}
+<div id="this-block">
+  <div class="mb-6 content">
+    <form ref="form" action="{{ url_for('admin_page.page_home_main') }}" 
+      method="post" enctype="multipart/form-data">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+      <input type="hidden" name="id" value="{{ edit_ver.id }}">
+      <input type="hidden" name="image_id1" :value="data_img.image_id1"/>
+      <input type="hidden" name="action" :value="action">
+
+      {% include 'shared/macros/_page_edit_buttons.html' %}
+      
+      <div class="field">
+        <label class="label">Heading*</label>
+        <div class="control">
+          <input 
+            autofocus
+            name="heading"
+            class="input"
+            type="text"
+            v-model="data.heading">
+        </div>
+        <p v-if="errorMsg[0]" class="help is-danger">[[ errorMsg[0] ]]</p>
+      </div>
+
+      <div class="field">
+        <label class="label">Important Text</label>
+        <div class="control">
+          <textarea id="important" class="simpletiny" name="important" v-model="data.important">
+          </textarea>
+        </div>
+        <p v-if="errorMsg[1]" class="help is-danger">[[ errorMsg[1] ]]</p>
+      </div>
+
+      <div class="field">
+        <label class="label">Main Text*</label>
+        <div class="control">
+          <textarea id="text" class="simpletiny" name="text" v-model="data.text">
+          </textarea>
+        </div>
+        <p v-if="errorMsg[2]" class="help is-danger">[[ errorMsg[2] ]]</p>
+      </div>
+
+      <div class="pt-4 field">
+        <label class="label">Current image*</label>
+        <div class="control">
+          {% if edit_ver.image1.filename %}
+          <p class="is-size-7">{{ edit_ver.image1.filename }}</p>
+          <img src="{{ url_for('static', filename='uploads/page/thumbnails/' ~ edit_ver.image1.thumbnail) }}">
+          {% else %}
+          <p>Empty</p>
+          {% endif %}
+        </div>
+      </div>
+      {% if edit_ver.page_status.name == 'draft' %}
+      {{ form_image(1,3) }}
+      {% endif %}
+
+    </form>
+    {{ version(edit_ver.page.name) }}
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+new Vue({
+  el: '#this-block',
+  delimiters: ['[[', ']]'],
+  data() {
+    return {
+      data: {
+        heading: '{{ edit_ver.heading or "" }}',
+        important: `{{ edit_ver.important|safe or "" }}`,
+        text: `{{ edit_ver.text|safe or "" }}`,
+      },
+      data_img: {
+        filename1: 'No file selected',
+        newimage1: 'upload',
+        image_id1: '{{ edit_ver.image_id1 or "none" }}',
+      },
+      num_images: {{ num_images }},
+      errorMsg: ['','','',''],
+      action: '',
+    }
+  },
+  methods: {
+    /* required for form validation */
+    clearErrors() {
+      for (let i=0; i<this.errorMsg.length;i++) {
+        this.errorMsg[i] = ''
+      }
+    },
+    hasError() {
+      err = false
+      for(let i=0; i<this.errorMsg.length; i++) {
+        if(this.errorMsg[i] != '') err = true
+      }
+      return err
+    },
+    doValidate(evt) {
+      if (evt.target.value != "Delete") {
+        this.clearErrors()
+        let important = tinyMCE.get('important').getContent()
+        let text= tinyMCE.get('text').getContent()
+        if (this.data.heading.length == 0) {
+          Vue.set(this.errorMsg, 0, 'This is a mandatory field')
+        } else if (this.data.heading.length > 50) {
+          Vue.set(this.errorMsg, 0, 'Maximum 50 characters')
+        }
+        if (important.length > 1000) {
+          Vue.set(this.errorMsg, 1, 'Maximum 1000 characters')
+        }
+        if (text.length == 0) {
+          Vue.set(this.errorMsg, 2, 'This is a mandatory field')
+        } else if (text.length > 1000) {
+          Vue.set(this.errorMsg, 2, 'Maximum 1000 characters')
+        }
+        if (evt.target.value != 'Save as draft') {
+          if (this.data_img.newimage1=='upload') {
+            let prev_err = -1
+            let fs = this.$refs['imgupload1'].files[0]
+            if (fs) {
+              if((fs.size/1024) > 1024) {
+                Vue.set(this.errorMsg, 3, 'Image cannot be larger than 1MB')
+              }
+            }
+          }
+        }
+      }
+      if (!this.hasError()) {
+        this.action = evt.target.value
+        for (let n=1; n<this.num_images+1; n++) {
+          let upl = this.$refs['imgupload'+n] ? this.$refs['imgupload'+n].value: ''
+          let sel = this.$refs['imgselect'+n] ? this.$refs['imgselect'+n].value: ''
+          if (upl || sel) {
+            this.data_img['image_id'+n]=''
+          }
+        }
+        this.$nextTick(() => {
+          this.$refs.form.submit()
+        })
+      }
+    },
+    /* required for images */
+    fileSelected(evt,img_num) {
+      if (evt.target.files.length > 0) {
+        this.data_img['filename'+img_num] = evt.target.files[0].name
+      }
+    },
+    clearSelection(ref,img_num,err_num) {
+      this.$refs[ref].value = ''
+      Vue.set(this.errorMsg, err_num, '')
+      this.data_img['filename'+img_num] = 'No file selected'
+    }
+  },
+  /* required for images */
+  filters: {
+    truncate: function (text, length, suffix) {
+      if (text.length > length) {
+          return text.substring(0, length) + suffix
+      } else {
+          return text
+      }
+    }
+  }
+})
+</script>
+{% include 'shared/tinymce/_tinymce_simple.html' %}
+{% endblock %}

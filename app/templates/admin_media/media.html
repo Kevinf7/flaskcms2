@@ -1,0 +1,128 @@
+{% extends "shared/base_main.html" %}
+{% from 'shared/macros/_modal.html' import modal %}
+{% from 'shared/macros/_pagination.html' import pagination %}
+{% block title %}Media{% endblock %}
+
+{% block app_content %}
+<div id="this-block">
+  {{ modal('showDelModal', 'Are you sure you want to delete this image?','Delete','doDelete','Cancel','doCancel') }} 
+
+  <form ref="delForm" method="post" action="{{ url_for('admin_media.del_image') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    <input type="hidden" name="id" :value="id">
+    {% if show %}
+    <input type="hidden" name="show" value="{{ show }}">
+    {% endif %}
+  </form>
+
+  {% if config.ADMIN_BLOG and config.ADMIN_PAGE %}
+  <div class="level">
+    <div class="level-left">
+      <span class="mr-2">Show</span>
+      <div class="select">
+        <select v-model="showType" @change="reloadPage">
+          <option value="">All</option>
+          <option value="blog">Blog</option>
+          <option value="page">Pages</option>
+        </select>
+      </div>
+    </div>
+    <div class="level-right">
+    </div>
+  </div>
+  {% endif %}
+
+  {% if images.items|length == 0 %}
+  <div class="content"><p>No media in database</p></div>
+  {% endif %}
+
+  {% for img in images.items %}
+  <div class="is-inline-block is-size-7" style="padding:10px;">
+    <img src="{{ url_for('static',filename='uploads/' ~ img.image_type.name ~ '/thumbnails/' ~ img.thumbnail) }}">
+    <p>
+      <span ref="copyclip-{{ loop.index }}">../../static/uploads/{{ img.image_type.name }}/{{ img.filename }}</span>
+      <a href="#" @Click.prevent="copyText({{ loop.index }})">
+        <i class="far fa-clipboard" title="copy"></i>
+      </a>
+    </p>
+    <p class="help is-info" v-if="checkShowMsg('copyclip-{{ loop.index }}')">Link copied</p>
+    <p>{{ img.file_width }}x{{ img.file_height }}</p>
+    <p>{{ img.file_size }} kb</p>
+    <p>
+      Uploaded: {{ moment(img.create_date).format('DD/MM/YY') }}
+      <a href="#" @click.prevent="showConfirm({{ img.id }})">
+        <i class="fas fa-trash-alt" title="delete"></i>
+      </a>
+    </p>
+  </div>
+  {% endfor %}
+
+  {% if images.pages > 1 %}
+  {% if show %}
+  {{ pagination(images,'admin_media.media',show=show) }}
+  {% else %}
+  {{ pagination(images,'admin_media.media') }}
+  {% endif %}
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+  new Vue({
+    el: '#this-block',
+    delimiters: ['[[', ']]'],
+    data() {
+      return {
+        id: 0,
+        showDelModal: false,
+        showCopyMsg: '',
+        showType: '{{ show or "" }}'
+      }
+    },
+    methods: {
+      copyText(id) {
+        let elem_id = "copyclip-" + id;
+        let txt = this.$refs[elem_id].innerHTML
+
+        this.$copyText(txt).then((e) => {
+          this.showCopyMsg = elem_id
+        }, (e) => {
+          console.log(e)
+        })
+      },
+      checkShowMsg(elem_id) {
+        if (elem_id == this.showCopyMsg) {
+          return true
+        } else {
+          return false
+        }
+      },
+      showConfirm(id) {
+        this.id = id
+        this.showDelModal = true
+      },
+      doCancel() {
+        this.id = 0
+        this.showDelModal = false
+      },
+      doDelete() {
+        this.showDelModal = false
+        this.$refs.delForm.submit()
+      },
+      reloadPage() {
+        if (this.showType) {
+          window.location.href=('{{ url_for("admin_media.media",show=x) }}' + this.showType)
+        } else {
+          window.location.href=('{{ url_for("admin_media.media") }}')
+        }
+      },
+      setShowType(value) {
+        this.showType = value
+      }
+    }
+  })
+</script>
+<script src="../../static/scripts/vue-clipboard.min.js"></script>
+{% endblock %}

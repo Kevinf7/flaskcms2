@@ -1,0 +1,31 @@
+{% extends "shared/base.html" %}
+
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <article class="message is-{{ category }}">
+        <div class="message-body">{{ message }}</div>
+      </article>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<div class="container">
+  <div class="pt-6 pl-2 pr-2 columns is-justify-content-center">
+    <div class="column is-narrow">
+      <div class="hero is-small is-primary">
+        <div class="hero-body">
+
+          <div class="p-2 title is-3 has-text-centered has-text-warning is-family-secondary">
+              Flask CMS
+          </div>
+
+        </div>
+      </div>
+      {% block app_content %}{% endblock %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+

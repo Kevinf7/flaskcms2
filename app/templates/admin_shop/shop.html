@@ -1,0 +1,85 @@
+{% extends "shared/base_main.html" %}
+{% from 'shared/macros/_pagination.html' import pagination %}
+{% block title %}Shop{% endblock %}
+
+{% block app_content %}
+<div id="this-block">
+
+  <form ref="showForm" method="post" action="{{ url_for('admin_shop.shop') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    <input type="hidden" name="show_type" :value="showType"/>
+  </form>
+
+  <div class="level">
+    <div class="level-left">
+      <span class="mr-2">Category</span>
+      <div class="mr-4 select">
+        <select v-model="showType" @change="getShow">
+          {% if category %}
+          <option value="all">All</option>
+          {% endif %}
+          {% for c in category %}
+          <option value="{{ c.id }}">{{ c.display }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class="level-right">
+      <button class="button is-link" @click="gotoURL('{{ url_for('admin_shop.product') }}')">
+        Add Product
+      </button>
+    </div>
+  </div>
+  <table class="table is-narrow is-striped is-hoverable is-fullwidth">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Product</th>
+        <th>Inventory</th>
+        <th>Category</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for c in catgen.items %}
+      <tr>
+        <td>Image</td>
+        <td>{{ c.title }}</td>
+        <td>?</td>
+        <td>{{ c.category.display }}</td>
+        <td class="has-text-right"><a href="{{ url_for('admin_shop') }}"><i class="far fa-edit" title="edit"></i></a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  {% if catgen.pages > 1 %}
+  {{ pagination(catgen,'admin_sshop') }}
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+  new Vue({
+    el: '#this-block',
+    delimiters: ['[[', ']]'],
+    data() {
+      return {
+        showType: '{{ show_type or "all" }}'
+      }
+    },
+    methods: {
+      getShow() {
+        this.$nextTick(() => {
+          this.$refs.showForm.submit()
+        })
+      },
+      gotoURL(url) {
+        window.location.href=(url)
+      }
+    }
+  })
+</script>
+{% endblock %}
