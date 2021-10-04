@@ -21,54 +21,13 @@
   </header>
   
   <section class="relative flex justify-center w-full mb-6 -mt-48">
-    <img class="w-5/12 animate-fadeIn" src="{{ url_for('main.static', filename='images/kundilini.jpg') }}" />
+    <img class="w-5/12 animate-fadeIn" src="{{ url_for('static', filename='uploads/page/' ~ main.image1.filename) }}" />
   </section>
 
   <div class="container flex justify-center max-w-full p-10">
     <article class="relative max-w-full prose">
-      <h1>Osho Kundilini Meditation</h1>
-      <p>This meditation is best done at sunset or in the late afternoon. Being fully immersed in the shaking and dancing of the first two stages helps to "melt" the rocklike being, wherever the energy flow has been repressed and blocked. Then that energy can flow, dance and be transformed into bliss and joy. The last two stages enable all this energy to flow vertically, to move upward into silence. It is a highly effective way of unwinding and letting go at the end of the day.</p>
-
-      <p>The meditation is to be done with its specific OSHO Kundalini Meditation music, which indicates and energetically supports the different stages.
-      For the music availability, see below. </p>
-
-      <h3>Instructions:</h3>
-      <p>The meditation lasts one hour and has four stages. The meditation is over when you hear three gong beats.</p>
-
-      <h4>First Stage: 15 minutes</h4>
-      <p>Be loose and let your whole body shake, feeling the energies moving up from your feet. Let go everywhere and become the shaking.<br/>
-      Your eyes may be open or closed.</p>
-
-      <h4>Second Stage: 15 minutes</h4>
-      <p>Dance – any way you feel, and let the whole body move as it wishes.
-      Your eyes may be open or closed.</p>
-
-      <h4>Third Stage: 15 minutes</h4>
-      <p>Close your eyes and be still, sitting or standing – witnessing whatever is happening inside and out.</p>
-
-      <h4>Fourth Stage: 15 minutes</h4>
-      <p>Keeping your eyes closed, lie down and be still.</p>
-
-      <h4>Note:</h4>
-      <p>In the fourth stage you may choose to remain sitting if you wish.</p>
-
-      <p>Some suggestions from Osho for this meditation:</p>
-
-      <h4>The first stage:</h4>
-      <p>"If you are doing the Kundalini Meditation, allow the shaking – don't do it! Stand silently, feel it coming, and when your body starts a little trembling, help it, but don't do it! Enjoy it, feel blissful about it, allow it, receive it, welcome it, but don't will it."</p>
-
-      <p>"If you force, it will become an exercise, a physical exercise of the body. Then the shaking will be there, but just on the surface. It will not penetrate you. You will remain solid, stonelike, rocklike within. You will remain the manipulator, the doer, and the body will just be following. The body is not the question, you are the question."</p>
-
-      <p>"When I say shake, I mean your solidity, your rocklike being should shake to the very foundations, so it becomes liquid, fluid, melts, flows. And when the rocklike being becomes liquid your body will follow. Then there is no shaker, only shaking; then nobody is doing it, it is simply happening. Then the doer is not.
-      "Enjoy it, but don't will it. And remember, whenever you will a thing you cannot enjoy it. They are reverse, opposites; they never meet. If you will a thing you cannot enjoy it, if you enjoy it you cannot will it ."</p>
-
-      <p>"If you shake your body rightly for fifteen minutes, with total feeling, then all the repressed energy will begin to manifest and flow."</p>
-
-      <h4>The second stage:</h4>
-      <p>"Dance with joy because the more blissful you are, the more the energy moves upward; the more the energy moves upward, the more blissful you become."</p>
-
-      <h4>The third stage:</h4>
-      <p>"It is useful to sit, so that the whole body disappears and only the spine remains. The energy moves upward through the spine and all the energy gathers in the spine."</p>
+      <h1>{{ main.heading }}</h1>
+      {{ main.text|safe }}
     </article>
   </div>
 
