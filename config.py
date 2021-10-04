@@ -55,7 +55,7 @@ class Config(object):
     SHOP_PER_PAGE = 20
 
     ### ADMIN CONTROL ###
-    ADMIN_BLOG = False
+    ADMIN_BLOG = True
     ADMIN_PAGE = True
     ADMIN_MESSAGE = False
     ADMIN_SHOP = True

@@ -4,7 +4,7 @@
 
 {% block app_content %}
 <div id="this-block">
-  <div class="content mb-6">
+  <div class="mb-6 content">
     <form ref="form" action="{{ url_for('admin_blog.post') }}"  
       method="post" enctype="multipart/form-data">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -28,7 +28,7 @@
           name="title"
           class="input"
           type="text"
-          v-model="title">
+          v-model="data.title">
         </div>
         <p v-if="errorMsg[0]" class="help is-danger">[[ errorMsg[0] ]]</p>
       </div>
@@ -36,7 +36,7 @@
       <div class="field">
         <label class="label">Write something</label>
         <div class="control">
-          <textarea id="post" name="post" class="textarea" v-model="post">
+          <textarea id="post" name="post" class="textarea" v-model="data.post">
           </textarea>
         </div>
         <p v-if="errorMsg[1]" class="help is-danger">[[ errorMsg[1] ]]</p>
@@ -49,7 +49,7 @@
             <i class="fas fa-exclamation-circle"></i>
             Remember to press Enter to add the tag 
           </p>
-          <div v-for='(tag, index) in tags' :key='tag' class="tags has-addons mr-2 tag-tags">
+          <div v-for='(tag, index) in tags' :key='tag' class="mr-2 tags has-addons tag-tags">
             <span class="tag is-info is-light">[[ tag ]]</span>
             <a @click="removeTag(index)" class="tag is-delete"></a>
           </div>
@@ -64,12 +64,13 @@
         <p v-if="errorMsg[2]" class="help is-danger">[[ errorMsg[2] ]]</p>
       </div>
 
-      <div class="field pt-4">
+      <div class="pt-4 field">
         <label class="label">Current image</label>
         <div class="control">
           <p>Empty</p>
         </div>
       </div>
+      <!-- if images -->
       {{ form_image(1,3) }}
     </form>
   </div>
@@ -84,12 +85,16 @@ new Vue({
   delimiters: ['[[', ']]'],
   data() {
     return {
-      title: '',
-      post: '',
+      data: {
+        title: '',
+        post: '',
+      },
+      data_img: {
+        filename1: 'No file selected',
+        newimage1: 'upload',
+      },
       tags: [],
       errorMsg: ['','','',''],
-      filename1: 'No file selected',
-      newimage1: 'upload'
     }
   },
   methods: {
@@ -130,9 +135,9 @@ new Vue({
     doValidate(evt) {
       this.clearErrors()
       let post = tinyMCE.get('post').getContent()
-      if (this.title.length == 0) {
+      if (this.data.title.length == 0) {
         Vue.set(this.errorMsg, 0, 'This field is mandatory')
-      } else if (this.title.length > 100) {
+      } else if (this.data.title.length > 100) {
         Vue.set(this.errorMsg, 0, 'Maximum 100 characters')
       }
       if (post.length == 0) {
@@ -140,7 +145,7 @@ new Vue({
       } else if (post.length > 15000) {
         Vue.set(this.errorMsg, 1, 'Maximum 15000 characters')
       }
-      if (this['newimage1']=='upload') {
+      if (this.data_img.newimage1=='upload') {
         let fs = this.$refs['imgupload1'].files[0]
         if (fs) {
           if((fs.size/1024) > 1024) {
@@ -159,17 +164,19 @@ new Vue({
         })
       }
     },
+    /* if images */
     fileSelected(evt,img_num) {
       if (evt.target.files.length > 0) {
-        this['filename'+img_num] = evt.target.files[0].name
+        this.data_img['filename'+img_num] = evt.target.files[0].name
       }
     },
     clearSelection(ref,img_num,err_num) {
       this.$refs[ref].value = ''
       Vue.set(this.errorMsg, err_num, '')
-      this['filename'+img_num] = 'No file selected'
+      this.data_img['filename'+img_num] = 'No file selected'
     }
   },
+  /* if images */
   filters: {
     truncate: function (text, length, suffix) {
       if (text.length > length) {

@@ -12,13 +12,10 @@
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
       <input type="hidden" name="id" value="{{ edit_ver.id }}">
       <input type="hidden" name="action" :value="action">
+      {% include 'shared/macros/_page_edit_buttons.html' %}
       <!-- if images -->
       <input type="hidden" name="image_id1" :value="data_img.image_id1"/>
-
-      <!-- required -->
-      {% include 'shared/macros/_page_edit_buttons.html' %}
-      
-      <!-- form -->
+     
       <div class="field">
         <label class="label">Heading*</label>
         <div class="control">
@@ -99,7 +96,6 @@ new Vue({
       }
       return err
     },
-    /* form */
     doValidate(evt) {
       if (evt.target.value != "Delete") {
         this.clearErrors()

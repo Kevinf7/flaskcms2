@@ -4,14 +4,14 @@
     selector: '#post',
     height: 360,
     width: "100%",
-    plugins: 'print preview paste searchreplace autolink directionality code visualblocks visualchars fullscreen image link media codesample table charmap hr nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap quickbars pagebreak',
-    menubar: 'file edit view insert format tools table help',
-    toolbar: 'undo redo | bold italic | formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | fullscreen  preview | insertfile image media link pagebreak codesample',
-  
+    plugins: 'preview fullscreen paste advlist lists link wordcount code image pagebreak codesample table emoticons',
+    menubar: false,
+    toolbar: 'undo redo | styleselect | bold italic | link table image | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | pagebreak fullscreen  preview | code | emoticons codesample',
+    
     imagetools_toolbar: '',
     images_upload_url: "{{ url_for('admin_media.imageuploader',image_type='blog') }}",
     automatic_uploads: true,
     images_reuse_filename: false,
     images_upload_base_path: '/static/uploads/blog'
-    })
+    });
 </script>

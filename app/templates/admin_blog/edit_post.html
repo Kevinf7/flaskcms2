@@ -76,6 +76,7 @@
           {% endif %}
         </div>
       </div>
+      <!-- if images -->
       {{ form_image(1,3) }}
     </form>
   </div>
@@ -169,6 +170,7 @@ new Vue({
         })
       }
     },
+    /* if images */
     fileSelected(evt,img_num) {
       if (evt.target.files.length > 0) {
         this.data_img['filename'+img_num] = evt.target.files[0].name
@@ -180,6 +182,7 @@ new Vue({
       this.data_img['filename'+img_num] = 'No file selected'
     }
   },
+  /* if images */
   filters: {
     truncate: function (text, length, suffix) {
       if (text.length > length) {

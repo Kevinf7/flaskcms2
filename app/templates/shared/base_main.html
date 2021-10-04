@@ -5,18 +5,16 @@
   <div id="main-app-1" class="column is-narrow has-background-primary">
     <div class="is-primary">
       <div class="p-3 title is-4 has-text-centered has-text-white is-family-secondary">
-        Flask CMS&nbsp;&nbsp;
+        Flask CMS&nbsp;&nbsp;&nbsp;
       </div>
     </div>
-    <aside class="p-4 menu">
-      <ul class="menu-list">
-        <li class="main-menu-item">
-          <a href="{{ url_for('admin_main.index') }}" style="margin-left:-15px;">
-            <span class="menu-spacing"><i class="fas fa-home"></i></span>
-            Home
-          </a>
-        </li>
-      </ul>
+    <aside class="p-5 menu">
+      <div class="menu-label">
+        <a class="app-menu-link" href="{{ url_for('admin_main.index') }}">
+          <span class="pr-2"><i class="fas fa-home fa-fw"></i></span>
+          Home
+        </a>
+      </div>
 
       <!--BLOG-->
       {% if config.ADMIN_BLOG %}
