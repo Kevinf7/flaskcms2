@@ -42,8 +42,9 @@ class PageStatus(db.Model):
 class PageHomeMain(db.Model):
     __tablename__ = 'page_home_main'
     id = db.Column(db.Integer, primary_key=True)
+    heading = db.Column(db.String(50), nullable=False)
     text = db.Column(db.String(1000), nullable=False)
-    image_id1 = db.Column(db.Integer, db.ForeignKey('images.id'), nullable=False)
+    image_id1 = db.Column(db.Integer, db.ForeignKey('images.id'), nullable=True)
     status_id = db.Column(db.Integer, db.ForeignKey('page_status.id'), nullable=False)
     page_id = db.Column(db.Integer, db.ForeignKey('page.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

@@ -24,6 +24,7 @@ def page():
 @set_breadcrumb('home page page-home-main')
 def page_home_main():
     fields = [
+        {'name': 'heading', 'type': 'str'},
         {'name': 'text', 'type': 'str'}
     ]
     edit_ver, all_ver = page_post(PageHomeMain,'home_main', fields, num_images=1)

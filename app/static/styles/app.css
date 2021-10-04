@@ -15,7 +15,7 @@ body {
 }
 .menu-spacing {
     display: inline-block;
-    width: 30px;
+    width: 20px;
 }
 .tag-tags {
     display:inline-flex;
@@ -25,6 +25,9 @@ body {
 }
 .app-menu-link:hover {
     color:#CCCCCC;
+}
+.main-menu-item {
+    font-size: 0.9em;
 }
 
   

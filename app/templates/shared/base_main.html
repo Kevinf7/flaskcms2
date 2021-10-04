@@ -4,14 +4,14 @@
 <div class="columns is-gapless" style="min-height:100vh;">
   <div id="main-app-1" class="column is-narrow has-background-primary">
     <div class="is-primary">
-      <div class="p-3 title is-4 has-text-centered has-text-warning is-family-secondary">
+      <div class="p-3 title is-4 has-text-centered has-text-white is-family-secondary">
         Flask CMS&nbsp;&nbsp;
       </div>
     </div>
     <aside class="p-4 menu">
       <ul class="menu-list">
-        <li>
-          <a href="{{ url_for('admin_main.index') }}" style="margin-left:-16px;">
+        <li class="main-menu-item">
+          <a href="{{ url_for('admin_main.index') }}" style="margin-left:-15px;">
             <span class="menu-spacing"><i class="fas fa-home"></i></span>
             Home
           </a>
@@ -23,33 +23,29 @@
       <div class="menu-label">
         <a class="app-menu-link" href="#" 
           @click="showBlog = !showBlog; setLocal('show_blog',showBlog)">
-          <span class="pr-3" v-show="showBlog"><i class="far fa-minus-square"></i></span>
-          <span class="pr-3" v-show="!showBlog"><i class="far fa-plus-square"></i></span>
+          <span class="pr-2" v-show="showBlog"><i class="fas fa-chevron-down fa-fw"></i></span>
+          <span class="pr-2" v-show="!showBlog"><i class="fas fa-chevron-right fa-fw"></i></span>
           Blog
         </a>
       </div>
       <ul v-if="showBlog" class="menu-list">
-        <li>
+        <li class="main-menu-item">
           <a href="{{ url_for('admin_blog.blog') }}">
-            <span class="menu-spacing"><i class="fab fa-microblog"></i></span>
             Blog
           </a>
         </li>
-        <li>
+        <li class="main-menu-item">
           <a href="{{ url_for('admin_blog.tag') }}">
-            <span class="menu-spacing"><i class="fas fa-tag"></i></span>
             Tags
           </a>
         </li>
-        <li>
+        <li class="main-menu-item">
           <a href="{{ url_for('admin_blog.comment') }}">
-            <span class="menu-spacing"><i class="far fa-comment"></i></span>
             Comments
           </a>
         </li>
-        <li>
+        <li class="main-menu-item">
           <a href="{{ url_for('admin_media.media',show='blog') }}">
-            <span class="menu-spacing"><i class="far fa-image"></i></span>
             Media
           </a>
         </li>
@@ -62,21 +58,19 @@
       <p class="menu-label">
         <a href="#" class="app-menu-link" 
           @click.prevent="showPage = !showPage; setLocal('show_page',showPage)">
-          <span class="pr-3" v-show="showPage"><i class="far fa-minus-square"></i></span>
-          <span class="pr-3" v-show="!showPage"><i class="far fa-plus-square"></i></span>
+          <span class="pr-2" v-show="showPage"><i class="fas fa-chevron-down fa-fw"></i></span>
+          <span class="pr-2" v-show="!showPage"><i class="fas fa-chevron-right fa-fw"></i></span>
           Pages
         </a>
       </p>
       <ul v-if="showPage" class="menu-list">
-        <li>
+        <li class="main-menu-item">
           <a href="{{ url_for('admin_page.page') }}">
-            <span class="menu-spacing"><i class="far fa-file-alt"></i></span>
             Pages
           </a>
         </li>
-        <li>
+        <li class="main-menu-item">
           <a href="{{ url_for('admin_media.media',show='page') }}">
-            <span class="menu-spacing"><i class="far fa-image"></i></span>
             Media
           </a>
         </li>
@@ -89,15 +83,15 @@
       <div class="menu-label app-menu-link">
         <a href="#" class="app-menu-link" 
           @click.prevent="showContact = !showContact; setLocal('show_contact',showContact)">
-          <span class="pr-3" v-show="showContact"><i class="far fa-minus-square"></i></span>
-          <span class="pr-3" v-show="!showContact"><i class="far fa-plus-square"></i></span>
+          <span class="pr-2" v-show="showContact"><i class="fas fa-chevron-down fa-fw"></i></span>
+          <span class="pr-2" v-show="!showContact"><i class="fas fa-chevron-right fa-fw"></i></span>
           Contact Form
         </a>
       </div>
       <ul v-if="showContact" class="menu-list">
-        <li>
+        <li class="main-menu-item">
           <a href="{{ url_for('admin_message.message') }}">
-            <span class="menu-spacing"><i class="far fa-envelope"></i></span>
+            <span class="menu-spacing"><i class="fas fa-chevron-right"></i></span>
             Messages
           </a>
         </li>
@@ -110,29 +104,28 @@
       <p class="menu-label">
         <a href="#" class="app-menu-link" 
           @click.prevent="showShop = !showShop; setLocal('show_shop',showShop)">
-          <span class="pr-3" v-show="showShop"><i class="far fa-minus-square"></i></span>
-          <span class="pr-3" v-show="!showShop"><i class="far fa-plus-square"></i></span>
+          <span class="pr-2" v-show="showShop"><i class="fas fa-chevron-down fa-fw"></i></span>
+          <span class="pr-2" v-show="!showShop"><i class="fas fa-chevron-right fa-fw"></i></span>
           Shop
         </a>
       </p>
       <ul v-if="showShop" class="menu-list">
-        <li>
+        <li class="main-menu-item">
           <a href="{{ url_for('admin_shop.shop') }}">
-            <span class="menu-spacing"><i class="fas fa-shopping-cart"></i></span>
             Shop
           </a>
         </li>
-        <li>
+        <li class="main-menu-item">
           <a href="{{ url_for('admin_shop.shop') }}">
-            <span class="menu-spacing"><i class="fas fa-shopping-cart"></i></span>
-            Ref
+            Reference
           </a>
         </li>
       </ul>
       {% endif %}
       <!--END SHOP-->
 
-      <hr style="border-top: 1px solid #DDDDDD;"/>
+      <hr style="border: none; height: 1px; background-color: #DDDDDD;"/>
+
       <p><a class="app-menu-link is-size-7" href="{{ url_for('admin_main.about') }}">About Flask CMS</a></p>
     </aside>
   </div>

@@ -3278,7 +3278,7 @@ button.dropdown-item {
     font-size: 1.5rem; }
 
 .menu-list {
-  line-height: 0.8; }
+  line-height: 1; }
   .menu-list a {
     border-radius: 2px;
     color: #ececec;
