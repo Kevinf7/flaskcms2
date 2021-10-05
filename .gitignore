@@ -3,9 +3,15 @@ migrations
 .env
 __pycache__
 secret.txt
-app/static/uploads/*
+app/static/uploads/**
 logs/
 
 # include folder
-!app/static/uploads/**/
+!app/static/uploads/
 !app/static/uploads/**/.gitkeep
+!app/static/uploads/blog
+!app/static/uploads/blog/**/.gitkeep
+!app/static/uploads/page
+!app/static/uploads/page/**/.gitkeep
+!app/static/uploads/store
+!app/static/uploads/store/**/.gitkeep
