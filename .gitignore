@@ -5,3 +5,7 @@ __pycache__
 secret.txt
 app/static/uploads/
 logs/
+
+# include folder
+!app/static/uploads/**/
+!app/static/uploads/**/.gitkeep
