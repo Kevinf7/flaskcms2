@@ -18,7 +18,7 @@ class Config(object):
         TEMPLATES_AUTO_RELOAD = True
         SERVER_NAME = 'localhost:5000'
     else:
-        SERVER_NAME = 'flaskcms2.pythonanywhere.com'
+        SERVER_NAME = 'flaskcms.pythonanywhere.com'
         SESSION_COOKIE_DOMAIN = False
         SESSION_COOKIE_SECURE = True
 
