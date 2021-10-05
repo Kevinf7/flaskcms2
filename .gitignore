@@ -11,7 +11,13 @@ logs/
 !app/static/uploads/**/.gitkeep
 !app/static/uploads/blog
 !app/static/uploads/blog/**/.gitkeep
+!app/static/uploads/blog/thumbnails
+!app/static/uploads/blog/thumbnails/**/.gitkeep
 !app/static/uploads/page
 !app/static/uploads/page/**/.gitkeep
+!app/static/uploads/page/thumbnails
+!app/static/uploads/page/thumbnails/**/.gitkeep
 !app/static/uploads/store
 !app/static/uploads/store/**/.gitkeep
+!app/static/uploads/store/thumbnails
+!app/static/uploads/store/thumbnails/**/.gitkeep
