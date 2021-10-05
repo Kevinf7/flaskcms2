@@ -21,7 +21,9 @@
   </header>
   
   <section class="relative flex justify-center w-full mb-6 -mt-48">
+    {% if main.image1 %}
     <img class="w-5/12 animate-fadeIn" src="{{ url_for('static', filename='uploads/page/' ~ main.image1.filename) }}" />
+    {% endif %}
   </section>
 
   <div class="container flex justify-center max-w-full p-10">
