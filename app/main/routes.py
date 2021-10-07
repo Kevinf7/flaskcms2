@@ -7,3 +7,9 @@ from app.admin_page.models import PageHomeMain, PageStatus
 def index():
     main = PageHomeMain.query.filter_by(page_status=PageStatus.getStatus('published')).first()
     return render_template('index.html', main=main)
+
+
+
+@bp.route('/try2')
+def try2():
+    return render_template('try2.html')
